@@ -3,6 +3,7 @@ import NoFavorites from '../../components/ui/NoFavorites'
 import { useEffect, useState } from 'react'
 import { localfavorites } from '../../utils'
 import { PokemonsFavorites } from '../../components/pokemon'
+
 const FavoritesPage = () => {
   const [favorites, setFavorites] = useState<number[]>([])
 
