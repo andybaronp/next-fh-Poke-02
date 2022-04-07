@@ -5,6 +5,9 @@ import { Navbar } from '../ui'
 type Props = {
   title?: string
 }
+undefined
+const origin = typeof window === 'undefined' ? '' : window.location.origin
+
 export const Layout: FC<Props> = ({ children, title }) => {
   return (
     <>
@@ -13,6 +16,9 @@ export const Layout: FC<Props> = ({ children, title }) => {
         <meta name='author' content='Jhoandris Barón' />
         <meta name='description' content={`Información del Pokémon ${title}`} />
         <meta name='keyword' content={`${title}, pokémon pokemon pokedex`} />
+        <meta property='og:title' content={`Info sobre ${title}`} />
+        <meta property='og:description' content={`Description from ${title}`} />
+        <meta property='og:image' content={`${origin}/img/banner.png`} />
       </Head>
       <Navbar />
       <main
