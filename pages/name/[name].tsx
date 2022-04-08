@@ -15,6 +15,7 @@ interface Props {
 }
 const PokemonByNamePage: NextPage<Props> = ({ pokemon }) => {
   const [favorite, setFavorite] = useState(
+    //trae la lista del localstorage
     localfavorites.existInFavorites(pokemon.id)
   )
 
@@ -22,6 +23,7 @@ const PokemonByNamePage: NextPage<Props> = ({ pokemon }) => {
     localfavorites.tooggleFavorites(pokemon.id)
     setFavorite(!favorite)
     if (favorite) return
+    // Efecto confeti
     confetti({
       zIndex: 999,
       particleCount: 150,
@@ -105,7 +107,7 @@ const PokemonByNamePage: NextPage<Props> = ({ pokemon }) => {
 }
 
 // You should use getStaticPaths if you’re statically pre-rendering pages that use dynamic routes
-
+// Pathd static  trabaja con el staticProps
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
   const { data } = await pokeApi.get<PokemonListResponse>(`/pokemon?limit=151`)
   const pokemonsName: string[] = data.results.map((pokemon) => pokemon.name)
@@ -113,17 +115,31 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
     paths: pokemonsName.map((name) => ({
       params: { name },
     })),
-    fallback: false,
+    // false si no pasa los que no existen- blocking verifica estando en build
+    fallback: 'blocking',
   }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { name } = params as { name: string }
+  const pokemon = await getPokemonInfo(name)
+  // verifica si existe o no hace la consulta sino redirige
+  if (!pokemon) {
+    return {
+      redirect: {
+        destination: '/',
+        // si la redireción es permanente o no
+        permanent: false,
+      },
+    }
+  }
 
   return {
     props: {
-      pokemon: await getPokemonInfo(name),
+      pokemon,
     },
+    // Revalida en segundos
+    revalidate: 86400,
   }
 }
 export default PokemonByNamePage

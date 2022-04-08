@@ -5,9 +5,10 @@ import { Navbar } from '../ui'
 type Props = {
   title?: string
 }
-undefined
+// verifica si existe el objeto window para trabajar en front o back
 const origin = typeof window === 'undefined' ? '' : window.location.origin
 
+// Layout principal
 export const Layout: FC<Props> = ({ children, title }) => {
   return (
     <>
