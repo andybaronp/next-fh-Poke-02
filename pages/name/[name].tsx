@@ -122,7 +122,8 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { name } = params as { name: string }
-  const pokemon = await getPokemonInfo(name)
+  const nameLowerCase = name.toLocaleLowerCase()
+  const pokemon = await getPokemonInfo(nameLowerCase)
   // verifica si existe o no hace la consulta sino redirige
   if (!pokemon) {
     return {
